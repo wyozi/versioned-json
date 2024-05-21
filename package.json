@@ -1,0 +1,45 @@
+{
+  "name": "versioned-json",
+  "version": "0.0.2",
+  "description": "",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs.js",
+      "import": "./dist/index.es.js"
+    },
+    "./zod": {
+      "require": "./dist/zod.cjs.js",
+      "import": "./dist/zod.es.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "wyozi",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.2.11",
+    "vite-plugin-doctest": "^1.0.0",
+    "vite-plugin-dts": "^3.9.1",
+    "vitest": "^1.6.0",
+    "zod": "^3.23.8"
+  },
+  "peerDependencies": {
+    "zod": "^3"
+  },
+  "peerDependenciesMeta": {
+    "zod": {
+      "optional": true
+    }
+  }
+}
