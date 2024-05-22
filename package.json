@@ -1,6 +1,6 @@
 {
   "name": "versioned-json",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
@@ -8,22 +8,22 @@
   "exports": {
     ".": {
       "require": {
-        "default": "./dist/index.cjs.js",
-        "types": "./dist/index.d.ts"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs.js"
       },
       "import": {
-        "default": "./dist/index.es.js",
-        "types": "./dist/index.d.ts"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.es.js"
       }
     },
     "./zod": {
       "require": {
-        "default": "./dist/zod.cjs.js",
-        "types": "./dist/zod/index.d.ts"
+        "types": "./dist/zod/index.d.ts",
+        "default": "./dist/zod.cjs.js"
       },
       "import": {
-        "default": "./dist/zod.es.js",
-        "types": "./dist/zod/index.d.ts"
+        "types": "./dist/zod/index.d.ts",
+        "default": "./dist/zod.es.js"
       }
     }
   },
