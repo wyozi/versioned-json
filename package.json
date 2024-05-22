@@ -1,18 +1,30 @@
 {
   "name": "versioned-json",
-  "version": "0.0.2",
+  "version": "0.0.7",
   "description": "",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs.js",
-      "import": "./dist/index.es.js"
+      "require": {
+        "default": "./dist/index.cjs.js",
+        "types": "./dist/index.d.ts"
+      },
+      "import": {
+        "default": "./dist/index.es.js",
+        "types": "./dist/index.d.ts"
+      }
     },
     "./zod": {
-      "require": "./dist/zod.cjs.js",
-      "import": "./dist/zod.es.js"
+      "require": {
+        "default": "./dist/zod.cjs.js",
+        "types": "./dist/zod/index.d.ts"
+      },
+      "import": {
+        "default": "./dist/zod.es.js",
+        "types": "./dist/zod/index.d.ts"
+      }
     }
   },
   "files": [
@@ -22,6 +34,7 @@
   ],
   "scripts": {
     "test": "vitest",
+    "clean": "rm -rf dist",
     "build": "vite build"
   },
   "keywords": [],

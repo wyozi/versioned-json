@@ -5,7 +5,7 @@ import { defineConfig } from "vitest/config";
 import packageJson from "./package.json";
 
 export default defineConfig({
-  plugins: [doctest(), dts({ rollupTypes: true })],
+  plugins: [doctest(), dts()],
   test: {
     includeSource: [
       "./src/**/*.[jt]s?(x)",
@@ -13,12 +13,12 @@ export default defineConfig({
     ],
   },
   build: {
-    // lib: {
-    //   entry: resolve(__dirname, "src/index.ts"),
-    //   name: getPackageNameCamelCase(),
-    //   formats,
-    //   fileName: (format) => fileName[format],
-    // },
+    lib: {
+      entry: [
+        resolve(__dirname, "src/index.ts"),
+        resolve(__dirname, "src/zod/index.ts"),
+      ],
+    },
     rollupOptions: {
       input: {
         index: resolve(__dirname, "src/index.ts"),

@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { VersionedJson, VersionedJsonOptions } from "..";
-import { IfEquals, SchemaTypeFromLatestVersion } from "../types";
 
 type SafeParseReturnType<T extends z.ZodTypeAny> = T extends z.ZodType<
   infer Output,
@@ -9,18 +8,6 @@ type SafeParseReturnType<T extends z.ZodTypeAny> = T extends z.ZodType<
 >
   ? z.SafeParseReturnType<Input, Output>
   : never;
-
-type ValidateSetup<
-  ZodSchema extends z.ZodTypeAny,
-  Options extends VersionedJsonOptions,
-  Schemas extends Record<number, any> = {},
-  LatestVersion extends (keyof Schemas & number) | never = never
-> = IfEquals<
-  z.infer<ZodSchema>,
-  SchemaTypeFromLatestVersion<Schemas, LatestVersion>,
-  VersionedZodJson<ZodSchema, Options, Schemas, LatestVersion>,
-  { error: true; message: "Schema does not match latest version" }
->;
 
 export class VersionedZodJson<
   ZodSchema extends z.ZodTypeAny,
@@ -36,7 +23,9 @@ export class VersionedZodJson<
   >(
     schema: ZodSchema,
     vj: VersionedJson<Options, Schemas, LatestVersion>
-  ): ValidateSetup<ZodSchema, Options, Schemas, LatestVersion> {
+  ): Schemas[LatestVersion] extends z.infer<ZodSchema>
+    ? VersionedZodJson<ZodSchema, Options, Schemas, LatestVersion>
+    : { error: true; message: "Schema does not match latest version" } {
     return new VersionedZodJson(schema, vj) as any;
   }
 
@@ -48,6 +37,10 @@ export class VersionedZodJson<
   safeParse(input: unknown): SafeParseReturnType<ZodSchema> {
     const migrated = this.versionedJson.unpack(input);
     return this.schema.safeParse(migrated) as any;
+  }
+
+  unpack(input: unknown): z.infer<ZodSchema> {
+    return this.schema.parse(this.versionedJson.unpack(input));
   }
 
   pack(input: z.infer<ZodSchema>) {

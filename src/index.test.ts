@@ -16,6 +16,23 @@ describe("initial migration", () => {
   });
 });
 
+describe("versioned json with only initial migration must pass already-versioned objects", () => {
+  const versioned = new VersionedJson().initialMigration(() => {
+    return { version: 1, data: { foo: "bar" } };
+  });
+
+  test("works", () => {
+    const migrated = versioned.applyMigration({
+      version: 1,
+      data: { baz: 42 },
+    });
+
+    // NOTE: we pass the object as-is, so the following type is wrong!
+    // We however don't have facilities to deal with this case :/
+    expect(migrated).toEqual({ version: 1, data: { baz: 42 } });
+  });
+});
+
 describe("initial migration without implementation", () => {
   const versioned = new VersionedJson()
     .initialMigration<{ name: string }>()

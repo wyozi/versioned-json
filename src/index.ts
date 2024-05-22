@@ -40,7 +40,8 @@ export class VersionedJson<
   >(
     migrate?: (
       unversioned: unknown
-    ) => EitherVersionedType<Options, FirstVersionType, FirstVersion>
+    ) => EitherVersionedType<Options, FirstVersionType, FirstVersion>,
+    version?: FirstVersion
   ): VersionedJson<
     Options,
     Schemas & {
@@ -51,6 +52,7 @@ export class VersionedJson<
     if (migrate) {
       this.migrations.set(null, { newVersion: null, migrator: migrate });
     }
+    this.latestVersion = (version as any) || (1 as any);
     return this as any;
   }
 
@@ -94,13 +96,13 @@ export class VersionedJson<
       typeof input.version === "number"
     ) {
       const { version, ...data } = input;
-      if (version === this.latestVersion) {
+      if (version === this.latestVersion || this.latestVersion === null) {
         return input as any;
       }
 
       const migrator = this.migrations.get(version);
       if (!migrator) {
-        throw new Error("missing migrator");
+        throw new Error(`missing migrator for fromVersion ${version}`);
       }
       const migrated = {
         ...migrator.migrator(data),
@@ -116,13 +118,13 @@ export class VersionedJson<
       "data" in input
     ) {
       const { version, data } = input;
-      if (version === this.latestVersion) {
+      if (version === this.latestVersion || this.latestVersion === null) {
         return input as any;
       }
 
       const migrator = this.migrations.get(version);
       if (!migrator) {
-        throw new Error("missing migrator");
+        throw new Error(`missing migrator for fromVersion ${version}`);
       }
       const migrated = {
         version: migrator.newVersion!,
